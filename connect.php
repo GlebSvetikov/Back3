@@ -23,6 +23,23 @@ $gender = $_POST['gender'];
 $limbs = $_POST['limbs'];
 $superpowers = $_POST['superpowers'];
 $bio = $_POST['bio'];
+    
+    $errors = [];
+ 
+if (!preg_match("/^[a-zA-Zа-яА-ЯёЁ\s]+$/u", $name)) {
+    $errors[] = "Имя содержит недопустимые символы.";
+}
+ 
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $errors[] = "Неверный формат e-mail.";
+}
+ 
+if (!empty($errors)) {
+    foreach ($errors as $error) {
+        echo $error . "<br>";
+    }
+    die();
+}
 
 $conn = new mysqli('localhost','u52982','7744161','u52982');
 if ($conn->connect_error) {
