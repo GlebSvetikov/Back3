@@ -50,21 +50,10 @@ if ($conn->connect_error) {
     $stmt->bind_param("ssssis", $name, $email, $birth_date, $gender, $limbs, $bio);
     $stmt->execute();
     $last_id = mysqli_insert_id($conn);
-    foreach ($superpowers as $item) {
-        switch ($item) {
-            case 'immortality':
-                $superpower_id = 1;
-              break;
-            case 'levitation':
-                $superpower_id = 2;
-              break;
-            case 'wall_passing':
-                $superpower_id = 3;
-              break;
-            case 'telekinesis':
-                $superpower_id = 4;
-              break;
-        }
+    $stmt = $db->prepare("SELECT id FROM SUPERPOWERS WHERE superpower = ?");
+    foreach ($superpower as $superpower) {
+        $stmt->execute([$superpower]);
+        $superpower_id = $stmt->fetchColumn();
       $query = "INSERT INTO user_superpowers (user_id, superpower_id) VALUES ('$last_id', '$superpower_id')";
         mysqli_query($conn, $query);
     }
